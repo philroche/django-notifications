@@ -33,9 +33,9 @@ def now():
     return _now()
 
 
-#SOFT_DELETE = getattr(settings, 'NOTIFICATIONS_SOFT_DELETE', False)
+# SOFT_DELETE = getattr(settings, 'NOTIFICATIONS_SOFT_DELETE', False)
 def is_soft_delete():
-    #TODO: SOFT_DELETE = getattr(settings, ...) doesn't work with "override_settings" decorator in unittest
+    # TODO: SOFT_DELETE = getattr(settings, ...) doesn't work with "override_settings" decorator in unittest
     #     But is_soft_delete is neither a very elegant way. Should try to find better approach
     return getattr(settings, 'NOTIFICATIONS_SOFT_DELETE', False)
 
@@ -193,7 +193,7 @@ class Notification(models.Model):
     objects = managers.PassThroughManager.for_queryset_class(NotificationQuerySet)()
 
     class Meta:
-        ordering = ('-timestamp', )
+        ordering = ('-timestamp',)
 
     def __unicode__(self):
         ctx = {
@@ -211,7 +211,7 @@ class Notification(models.Model):
             return u'%(actor)s %(verb)s %(action_object)s %(timesince)s ago' % ctx
         return u'%(actor)s %(verb)s %(timesince)s ago' % ctx
 
-    def __str__(self):#Adds support for Python 3
+    def __str__(self):  # Adds support for Python 3
         return self.__unicode__()
 
     def timesince(self, now=None):
@@ -252,7 +252,7 @@ def notify_handler(verb, **kwargs):
     recipient = kwargs.pop('recipient')
     actor = kwargs.pop('sender')
     newnotify = Notification(
-        recipient = recipient,
+        recipient=recipient,
         actor_content_type=ContentType.objects.get_for_model(actor),
         actor_object_id=actor.pk,
         verb=text_type(verb),
@@ -274,6 +274,7 @@ def notify_handler(verb, **kwargs):
 
     newnotify.save()
 
+    return newnotify
 
 # connect the signal
 notify.connect(notify_handler, dispatch_uid='notifications.models.notification')
